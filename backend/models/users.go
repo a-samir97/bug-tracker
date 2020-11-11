@@ -48,23 +48,25 @@ func (user *User) isCustomer() bool {
 	return false
 }
 
-type UserDB struct{}
+type UserDB struct {
+	db *sql.DB
+}
 
-func (user *UserDB) insertUser(db *sql.DB, newUser User) error {
+func (user *UserDB) insertUser(newUser User) error {
 	return nil
 }
 
-func (user *UserDB) updateUser(db *sql.DB, updatedUser User) *User {
+func (user *UserDB) updateUser(updatedUser User) *User {
 
 	return nil
 }
 
-func (user *UserDB) getUser(db *sql.DB, id int) *User {
+func (user *UserDB) getUser(id int) *User {
 
 	return nil
 }
 
-func (user *UserDB) deleteUser(db *sql.DB, id int) error {
+func (user *UserDB) deleteUser(id int) error {
 
 	return nil
 }
