@@ -1,2 +1,9 @@
-# bug-tracker
-Web app to track applications bugs 
+# Bug Tracker
+
+ - Web app to track applications bugs 
+
+### User Roles
+
+ - Admin
+ - Customer
+ - Stuff
