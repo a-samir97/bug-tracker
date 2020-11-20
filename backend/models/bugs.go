@@ -1,6 +1,7 @@
 package models
 
 import (
+	"database/sql"
 	"time"
 )
 
@@ -27,4 +28,8 @@ func (bug *Bug) getCreatedUser() {
 
 }
 
-type BugDB struct{}
+type BugDB struct {
+	Db *sql.DB
+}
+
+var BugDb = &BugDB{}

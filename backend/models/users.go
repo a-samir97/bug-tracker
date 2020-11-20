@@ -71,3 +71,5 @@ func (user *UserDB) DeleteUser(id int) error {
 
 	return nil
 }
+
+var UserDb = &UserDB{}

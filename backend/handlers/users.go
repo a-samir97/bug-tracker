@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"BugTracker/helpers"
 	"BugTracker/models"
 	"encoding/json"
 	"net/http"
@@ -11,9 +10,6 @@ import (
 )
 
 type UserHandlers struct{}
-
-// database instance for user
-var userDB = models.UserDB{Db: helpers.DB}
 
 // CreateUser function ... to create a new user
 func (u *UserHandlers) CreateUser(w http.ResponseWriter, r *http.Request) {
@@ -47,7 +43,7 @@ func (u *UserHandlers) CreateUser(w http.ResponseWriter, r *http.Request) {
 		Role:      models.Role{Name: data["role"]},
 		CreatedAt: time.Now()}
 
-	_, err = userDB.InsertUser(user)
+	_, err = models.UserDb.InsertUser(user)
 
 	if err != nil {
 		w.Header().Add("Content-Type", "application/json")

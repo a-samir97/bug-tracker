@@ -10,15 +10,18 @@ import (
 )
 
 func main() {
-	db, err := helpers.InitDb()
+
+	DB, err := helpers.InitDb()
 	if err != nil {
 		log.Fatal(err.Error())
 		return
 	}
-	role := models.RoleDB{Db: db}
-	_ = role.GetOrInsertRole("admin")
+	models.RoleDb.Db = DB
+	models.BugDb.Db = DB
+	models.UserDb.Db = DB
+	models.StatusDb.Db = DB
 
-	r := routes.Router()
+	r := routes.RolesRouter()
 	srv := &http.Server{
 		Handler: r,
 		Addr:    "127.0.0.1:8000",
