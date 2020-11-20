@@ -1,7 +1,6 @@
 package models
 
 import (
-	"BugTracker/helpers"
 	"database/sql"
 )
 
@@ -19,7 +18,7 @@ type RoleDB struct {
 
 // GetOrInsertRole ...
 // to insert a new role or get existing role
-func (role *RoleDB) GetOrInsertRole(userRole string) *Role {
+func (role *RoleDB) GetOrInsertRole(userRole string) (*Role, bool) {
 	var roleID int
 	var roleName string
 
@@ -30,12 +29,12 @@ func (role *RoleDB) GetOrInsertRole(userRole string) *Role {
 		sqlStatement := `INSERT INTO roles (role_name) VALUES ($1) RETURNING role_id, role_name`
 		_ = role.Db.QueryRow(sqlStatement, userRole).Scan(&roleID, &roleName)
 		roleStruct := &Role{ID: roleID, Name: roleName}
-		return roleStruct
+		return roleStruct, true
 	}
 
 	// return existing role
 	roleStruct := &Role{ID: roleID, Name: roleName}
-	return roleStruct
+	return roleStruct, false
 }
 
 func (role *RoleDB) deleteRole() {
@@ -43,4 +42,4 @@ func (role *RoleDB) deleteRole() {
 }
 
 // database instance for roles
-var RoleDb = &RoleDB{Db: helpers.DB}
+var RoleDb = &RoleDB{}
