@@ -13,7 +13,7 @@ import (
 func InitDb() (*sql.DB, error) {
 	var connectionString string
 
-	if os.Getenv("BUILD_ON_TRAVIS") == "true" {
+	if os.Getenv("GO111MODULE") == "travis" {
 		connectionString = fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
 			"127.0.0.1", 5432, "travis", "", "travis_ci_test")
 	} else {
