@@ -18,7 +18,7 @@ type RoleDB struct {
 
 // GetOrInsertRole ...
 // to insert a new role or get existing role
-func (role *RoleDB) GetOrInsertRole(userRole string) (*Role, bool) {
+func (role *RoleDB) GetOrInsertRole(userRole string) (*Role, bool, error) {
 	var roleID int
 	var roleName string
 
@@ -26,20 +26,36 @@ func (role *RoleDB) GetOrInsertRole(userRole string) (*Role, bool) {
 
 	// insert a new role and return id, role name after inserting it in the database
 	if roleID == 0 && roleName == "" {
-		sqlStatement := `INSERT INTO roles (role_name) VALUES ($1) RETURNING role_id, role_name`
-		_ = role.Db.QueryRow(sqlStatement, userRole).Scan(&roleID, &roleName)
+		sqlStatement, err := role.Db.Prepare(`INSERT INTO roles (role_name) VALUES ($1) RETURNING role_id, role_name`)
+		if err != nil {
+			return nil, false, err
+		}
+
+		// use Exec
+		_ = sqlStatement.QueryRow(userRole).Scan(&roleID, &roleName)
 		roleStruct := &Role{ID: roleID, Name: roleName}
-		return roleStruct, true
+		return roleStruct, true, nil
 	}
 
 	// return existing role
 	roleStruct := &Role{ID: roleID, Name: roleName}
-	return roleStruct, false
+	return roleStruct, false, nil
+}
+
+func (role *RoleDB) GetRoleByID(roleId string) *Role {
+	var roleID int
+	var roleName string
+
+	_ = role.Db.QueryRow("SELECT role_id, role_name from roles WHERE role_id = $1", roleId).Scan(&roleID, &roleName)
+
+	roleStruct := &Role{ID: roleID, Name: roleName}
+
+	return roleStruct
 }
 
 func (role *RoleDB) deleteRole() {
 
 }
 
-// database instance for roles
+// RoleDb.. database instance for roles
 var RoleDb = &RoleDB{}

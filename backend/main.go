@@ -22,6 +22,8 @@ func main() {
 	models.StatusDb.Db = DB
 
 	r := routes.RolesRouter()
+	r = routes.UserRouter()
+
 	srv := &http.Server{
 		Handler: r,
 		Addr:    "127.0.0.1:8000",
