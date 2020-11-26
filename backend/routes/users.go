@@ -6,13 +6,13 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func Router() *mux.Router {
+func UserRouter() *mux.Router {
 	r := mux.NewRouter()
 	// struct for user handlers
 	var user handlers.UserHandlers
 
 	// create a new user
-	r.HandleFunc("/api/users/create", user.CreateUser).Methods("POST")
+	r.HandleFunc("/api-users/create", user.CreateUser).Methods("POST")
 
 	return r
 }

@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"BugTracker/helpers"
 	"BugTracker/models"
 	"encoding/json"
 	"net/http"
@@ -28,19 +29,37 @@ func (u *UserHandlers) CreateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// check if username is not exists
+	usernameExists := helpers.UsernameExists(data["username"])
+	if usernameExists {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("username is already exist"))
+		return
+	}
+
 	// check if email is not exists
+	emailExists := helpers.EmailExists(data["email"])
+	if emailExists {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("email is already exist"))
+		return
+	}
+
+	// encrypt user password
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("there is something wrong, please try again"))
+		return
 	}
+	// get role of the user
+	userRole := models.RoleDb.GetRoleByID(data["role_id"])
 
 	user := &models.User{
 		Username:  data["username"],
 		Password:  string(hashedPassword),
 		Email:     data["email"],
-		Role:      models.Role{Name: data["role"]},
+		Role:      *userRole,
 		CreatedAt: time.Now()}
 
 	_, err = models.UserDb.InsertUser(user)
@@ -49,10 +68,13 @@ func (u *UserHandlers) CreateUser(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
+		return
+
 	} else {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusCreated)
 		w.Write([]byte("User is Created"))
+		return
 	}
 
 }

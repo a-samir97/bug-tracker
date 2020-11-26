@@ -12,7 +12,7 @@ type User struct {
 	Password  string    `json:"password"`
 	Email     string    `json:"email"`
 	CreatedAt time.Time `json:"created_at"`
-	Role      Role      `json:"role"`
+	Role      Role      `json:"role_id"`
 }
 
 func (user *User) getUsername() string {
@@ -53,8 +53,21 @@ type UserDB struct {
 }
 
 func (user *UserDB) InsertUser(newUser *User) (*User, error) {
+	sqlStatment, err := UserDb.Db.Prepare(`
+	INSERT INTO users (username, password, email, role_id, created_at) 
+	VALUES ($1, $2, $3, $4, $5) 
+	RETURNING username, email, role_id `)
 
-	return nil, nil
+	if err != nil {
+		return nil, err
+	}
+	_, err = sqlStatment.Exec(newUser.Username, newUser.Password, newUser.Email, newUser.Role.ID, newUser.CreatedAt)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return newUser, nil
 }
 
 func (user *UserDB) UpdateUser(updatedUser User) *User {

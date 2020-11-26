@@ -15,16 +15,22 @@ func (role *RoleHandlers) CreateRole(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
 	if err != nil {
-		w.Write([]byte("Something goes wrong, please try again"))
+		w.Write([]byte("Can not decode JSON data"))
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	newRole, created := models.RoleDb.GetOrInsertRole(data["role_name"])
+	newRole, created, err := models.RoleDb.GetOrInsertRole(data["role_name"])
+
+	if err != nil {
+		w.Write([]byte("Can not encode to JSON"))
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 
 	jsonData, err := json.Marshal(&newRole)
 
 	if err != nil {
-		w.Write([]byte("Can not save the role"))
+		w.Write([]byte("Can not encode to JSON"))
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
