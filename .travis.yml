@@ -6,7 +6,7 @@ before_script:
   
 env:
   global:
-     - BUILD_ON_TRAVIS=true
+     - BUILD_ON_TRAVIS="true"
 
 language: go
 go:
