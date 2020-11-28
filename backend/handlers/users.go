@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"BugTracker/auth"
 	"BugTracker/helpers"
 	"BugTracker/models"
 	"encoding/json"
@@ -77,6 +78,38 @@ func (u *UserHandlers) CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+}
+
+//LoginUser function .. to login user usering jwt authentication
+func (u *UserHandlers) LoginUser(w http.ResponseWriter, r *http.Request) {
+	// User Data
+	// email, password
+	var data map[string]string
+	err := json.NewDecoder(r.Body).Decode(&data)
+	defer r.Body.Close()
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("there is something wrong, please try again"))
+	}
+
+	user := helpers.AuthenticateUser(data["email"], data["password"])
+
+	if user != nil {
+		token, err := auth.CreateToken(user.ID)
+
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte("there is something wrong, please try again"))
+		} else {
+			w.WriteHeader(http.StatusOK)
+			w.Write([]byte(token))
+		}
+		return
+	}
+
+	w.WriteHeader(http.StatusNotFound)
+	w.Write([]byte("make sure that your credentials are right"))
 }
 
 func (u *UserHandlers) UpdateUser(w http.ResponseWriter, r *http.Request) {

@@ -1,8 +1,12 @@
 package helpers
 
-import "BugTracker/models"
+import (
+	"BugTracker/models"
 
-// to check for username if exists or not ...
+	"golang.org/x/crypto/bcrypt"
+)
+
+// UsernameExists ... to check for username if exists or not ...
 func UsernameExists(username string) bool {
 	var usernameUser string
 
@@ -14,7 +18,7 @@ func UsernameExists(username string) bool {
 	return true
 }
 
-// to check for email if exists or not ...
+// EmailExists ...to check for email if exists or not ...
 func EmailExists(email string) bool {
 	var checkEmail string
 
@@ -24,4 +28,38 @@ func EmailExists(email string) bool {
 		return false
 	}
 	return true
+}
+
+// HashPassword function .. to encrypt user's password
+func HashPassword(password string) (string, error) {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	return string(hashedPassword), err
+}
+
+// CheckPassword function ... to check if the password is correct
+func CheckPassword(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
+}
+
+// AuthenticateUser ...
+func AuthenticateUser(email string, password string) *models.User {
+	var userEmail string
+	var hashPassword string
+	var userID int
+
+	_ = models.UserDb.Db.QueryRow("SELECT user_id, email, password FROM users WHERE email = $1", email).Scan(&userID, &userEmail, &hashPassword)
+
+	if userEmail == "" || hashPassword == "" {
+		return nil
+	}
+
+	checkUserPassword := CheckPassword(password, hashPassword)
+
+	if checkUserPassword {
+		user := models.User{ID: userID, Email: userEmail}
+		return &user
+	}
+
+	return nil
 }
