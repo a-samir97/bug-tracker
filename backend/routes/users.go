@@ -13,6 +13,7 @@ func UserRouter() *mux.Router {
 
 	// create a new user
 	r.HandleFunc("/api-users/create", user.CreateUser).Methods("POST")
+	r.HandleFunc("/api-users/login", user.LoginUser).Methods("POST")
 
 	return r
 }
