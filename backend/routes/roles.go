@@ -6,17 +6,19 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func RolesRouter() *mux.Router {
-	r := mux.NewRouter()
+func RolesRouter(r *mux.Router) {
+	s := r.PathPrefix("/api-roles").Subrouter()
 
 	// struct for user handlers
 	var role handlers.RoleHandlers
 
 	// create a new role
-	r.HandleFunc("/api-roles/create/", role.CreateRole).Methods("POST")
+	s.HandleFunc("/create/", role.CreateRole).Methods("POST")
+
 	// edit existing role
-	r.HandleFunc("/api-roles/edit", role.EditRole).Methods("PUT")
+	s.HandleFunc("/edit/", role.EditRole).Methods("PUT")
+
 	// delete existing role
-	r.HandleFunc("/api-roles/delete", role.DeleteRole).Methods("DELETE")
-	return r
+	s.HandleFunc("/delete/", role.DeleteRole).Methods("DELETE")
+
 }

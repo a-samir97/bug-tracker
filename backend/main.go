@@ -7,6 +7,8 @@ import (
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/gorilla/mux"
 )
 
 func main() {
@@ -16,13 +18,16 @@ func main() {
 		log.Fatal(err.Error())
 		return
 	}
+
 	models.RoleDb.Db = DB
 	models.BugDb.Db = DB
 	models.UserDb.Db = DB
 	models.StatusDb.Db = DB
 
-	r := routes.RolesRouter()
-	r = routes.UserRouter()
+	r := mux.NewRouter()
+
+	routes.RolesRouter(r)
+	routes.UserRouter(r)
 
 	srv := &http.Server{
 		Handler: r,
