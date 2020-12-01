@@ -2,6 +2,7 @@ package routes
 
 import (
 	"BugTracker/handlers"
+	"BugTracker/middlewares"
 
 	"github.com/gorilla/mux"
 )
@@ -13,12 +14,12 @@ func RolesRouter(r *mux.Router) {
 	var role handlers.RoleHandlers
 
 	// create a new role
-	s.HandleFunc("/create/", role.CreateRole).Methods("POST")
+	s.HandleFunc("/create/", middlewares.TokenAuthMiddleware(role.CreateRole)).Methods("POST")
 
 	// edit existing role
-	s.HandleFunc("/edit/", role.EditRole).Methods("PUT")
+	s.HandleFunc("/edit/", middlewares.TokenAuthMiddleware(role.EditRole)).Methods("PUT")
 
 	// delete existing role
-	s.HandleFunc("/delete/", role.DeleteRole).Methods("DELETE")
+	s.HandleFunc("/delete/", middlewares.TokenAuthMiddleware(role.EditRole)).Methods("DELETE")
 
 }
