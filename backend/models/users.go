@@ -53,7 +53,7 @@ type UserDB struct {
 }
 
 func (user *UserDB) InsertUser(newUser *User) (*User, error) {
-	sqlStatment, err := UserDb.Db.Prepare(`
+	sqlStatement, err := UserDb.Db.Prepare(`
 	INSERT INTO users (username, password, email, role_id, created_at) 
 	VALUES ($1, $2, $3, $4, $5) 
 	RETURNING username, email, role_id `)
@@ -61,7 +61,7 @@ func (user *UserDB) InsertUser(newUser *User) (*User, error) {
 	if err != nil {
 		return nil, err
 	}
-	_, err = sqlStatment.Exec(newUser.Username, newUser.Password, newUser.Email, newUser.Role.ID, newUser.CreatedAt)
+	_, err = sqlStatement.Exec(newUser.Username, newUser.Password, newUser.Email, newUser.Role.ID, newUser.CreatedAt)
 
 	if err != nil {
 		return nil, err
@@ -81,6 +81,11 @@ func (user *UserDB) GetUser(id int) *User {
 }
 
 func (user *UserDB) DeleteUser(id int) error {
+
+	return nil
+}
+
+func (user *UserDB) ChangePassword() error {
 
 	return nil
 }

@@ -18,7 +18,8 @@ func main() {
 		log.Fatal(err.Error())
 		return
 	}
-
+	// need better implementation for this part
+	// reed about design pattern, to solve this part
 	models.RoleDb.Db = DB
 	models.BugDb.Db = DB
 	models.UserDb.Db = DB
