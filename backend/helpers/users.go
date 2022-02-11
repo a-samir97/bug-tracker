@@ -57,7 +57,7 @@ func AuthenticateUser(email string, password string) *models.User {
 	checkUserPassword := CheckPassword(password, hashPassword)
 
 	if checkUserPassword {
-		user := models.User{ID: userID, Email: userEmail}
+		user := models.User{Email: userEmail}
 		return &user
 	}
 

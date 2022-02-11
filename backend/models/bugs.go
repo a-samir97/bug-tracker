@@ -2,16 +2,14 @@ package models
 
 import (
 	"database/sql"
-	"time"
 )
 
 // Bug struct ...
 type Bug struct {
-	ID          int       `json:"bug_id"`
+	Base
 	Title       string    `json:"title"`
 	Description string    `json:"description"`
 	Screenshot  byte      `json:"screenshot"`
-	CreatedAt   time.Time `json:"created_at"`
 	User        User      `json:"user"`
 	Status      string    `json:"status"`
 }

@@ -6,7 +6,6 @@ import (
 	"BugTracker/models"
 	"encoding/json"
 	"net/http"
-	"time"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -57,11 +56,10 @@ func (u *UserHandlers) CreateUser(w http.ResponseWriter, r *http.Request) {
 	userRole := models.RoleDb.GetRoleByID(data["role_id"])
 
 	user := &models.User{
-		Username:  data["username"],
-		Password:  string(hashedPassword),
-		Email:     data["email"],
-		Role:      *userRole,
-		CreatedAt: time.Now()}
+		Username: data["username"],
+		Password: string(hashedPassword),
+		Email:    data["email"],
+		Role:     *userRole}
 
 	_, err = models.UserDb.InsertUser(user)
 
@@ -96,7 +94,7 @@ func (u *UserHandlers) LoginUser(w http.ResponseWriter, r *http.Request) {
 	user := helpers.AuthenticateUser(data["email"], data["password"])
 
 	if user != nil {
-		token, err := auth.CreateToken(user.ID)
+		token, err := auth.CreateToken(user.Id)
 
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)

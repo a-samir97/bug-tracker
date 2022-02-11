@@ -2,17 +2,15 @@ package models
 
 import (
 	"database/sql"
-	"time"
 )
 
 // User struct ....
 type User struct {
-	ID        int       `json:"user_id"`
-	Username  string    `json:"username"`
-	Password  string    `json:"password"`
-	Email     string    `json:"email"`
-	CreatedAt time.Time `json:"created_at"`
-	Role      Role      `json:"role_id"`
+	Base
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Email    string `json:"email"`
+	Role     Role   `json:"role_id"`
 }
 
 func (user *User) getUsername() string {
@@ -28,24 +26,15 @@ func (user *User) getUserRole() string {
 }
 
 func (user *User) isAdmin() bool {
-	if user.Role.Name == "Admin" {
-		return true
-	}
-	return false
+	return user.Role.Name == "Admin"
 }
 
 func (user *User) isStuff() bool {
-	if user.Role.Name == "Stuff" {
-		return true
-	}
-	return false
+	return user.Role.Name == "Stuff"
 }
 
 func (user *User) isCustomer() bool {
-	if user.Role.Name == "Customer" {
-		return true
-	}
-	return false
+	return user.Role.Name == "Customer"
 }
 
 type UserDB struct {
