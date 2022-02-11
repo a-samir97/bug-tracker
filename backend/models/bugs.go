@@ -13,7 +13,7 @@ type Bug struct {
 	Screenshot  byte      `json:"screenshot"`
 	CreatedAt   time.Time `json:"created_at"`
 	User        User      `json:"user"`
-	Status      Status    `json:"status"`
+	Status      string    `json:"status"`
 }
 
 func (bug *Bug) getAssignedUsers() {

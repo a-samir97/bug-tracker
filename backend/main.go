@@ -23,7 +23,6 @@ func main() {
 	models.RoleDb.Db = DB
 	models.BugDb.Db = DB
 	models.UserDb.Db = DB
-	models.StatusDb.Db = DB
 
 	r := mux.NewRouter()
 
@@ -37,6 +36,6 @@ func main() {
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}
-
+	log.Println("Server is running or port 8000 ...")
 	log.Fatal(srv.ListenAndServe())
 }
