@@ -10,6 +10,7 @@ type Ticket struct {
 	Status      string
 }
 
+// TODO: add Message Model, for every ticket, there will be message between customer and our agent
 func (ticket *Ticket) CreateTicket() error {
 
 	return nil
