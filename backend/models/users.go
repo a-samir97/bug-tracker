@@ -33,10 +33,6 @@ func (user *User) isStuff() bool {
 	return user.Role.Name == "Stuff"
 }
 
-func (user *User) isCustomer() bool {
-	return user.Role.Name == "Customer"
-}
-
 type UserDB struct {
 	Db *sql.DB
 }
