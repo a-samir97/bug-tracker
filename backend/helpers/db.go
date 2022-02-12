@@ -7,7 +7,8 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
-	_ "github.com/lib/pq" // sql behavior modified
+	_ "github.com/lib/pq" // sql behavior modified (postgreSQL database)
+	_ "github.com/mattn/go-sqlite3" // for sqlite3 database
 )
 
 func InitDb() (*sql.DB, error) {
@@ -28,5 +29,16 @@ func InitDb() (*sql.DB, error) {
 		log.Fatal(err.Error())
 		return nil, err
 	}
+	return db, nil
+}
+
+// to initize SQLite database for developing and testing
+func InitSQLiteDB() (*sql.DB, error) {
+	db, err := sql.Open("sqlite3", "bug_project.db")
+
+	if err != nil {
+		return nil, err
+	}
+
 	return db, nil
 }

@@ -52,14 +52,12 @@ func (u *UserHandlers) CreateUser(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("there is something wrong, please try again"))
 		return
 	}
-	// get role of the user
-	userRole := models.RoleDb.GetRoleByID(data["role_id"])
 
 	user := &models.User{
 		Username: data["username"],
 		Password: string(hashedPassword),
 		Email:    data["email"],
-		Role:     *userRole}
+		Role:     data["role"]}
 
 	_, err = models.UserDb.InsertUser(user)
 
@@ -119,21 +117,5 @@ func (u *UserHandlers) GetUserByID(w http.ResponseWriter, r *http.Request) {
 }
 
 func (u *UserHandlers) DeleteUser(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func (u *UserHandlers) GetAllUsers(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func (u *UserHandlers) GetAllAdmins(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func (u *UserHandlers) GetAllCustomers(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func (u *UserHandlers) GetAllStuff(w http.ResponseWriter, r *http.Request) {
 
 }

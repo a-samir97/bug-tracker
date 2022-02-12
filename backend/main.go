@@ -13,20 +13,20 @@ import (
 
 func main() {
 
-	DB, err := helpers.InitDb()
+	// for developing and testing use SQLite3
+	// for production use PostgreSQL
+	DB, err := helpers.InitSQLiteDB()
 	if err != nil {
 		log.Fatal(err.Error())
 		return
 	}
 	// need better implementation for this part
 	// reed about design pattern, to solve this part
-	models.RoleDb.Db = DB
 	models.BugDb.Db = DB
 	models.UserDb.Db = DB
 
 	r := mux.NewRouter()
 
-	routes.RolesRouter(r)
 	routes.UserRouter(r)
 
 	srv := &http.Server{
