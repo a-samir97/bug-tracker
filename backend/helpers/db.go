@@ -7,7 +7,7 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
-	_ "github.com/lib/pq" // sql behavior modified (postgreSQL database)
+	_ "github.com/lib/pq"           // sql behavior modified (postgreSQL database)
 	_ "github.com/mattn/go-sqlite3" // for sqlite3 database
 )
 
@@ -35,6 +35,21 @@ func InitDb() (*sql.DB, error) {
 // to initize SQLite database for developing and testing
 func InitSQLiteDB() (*sql.DB, error) {
 	db, err := sql.Open("sqlite3", "bug_project.db")
+
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = db.Exec(`
+		CREATE TABLE IF NOT EXISTS users (
+		user_id SERIAL PRIMARY KEY,
+		role VARCHAR(100) NOT NULL,
+		username VARCHAR(100) NOT NULL UNIQUE,
+		first_name VARCHAR(100) NULL,
+		last_name VARCHAR(100) NULL,
+		email VARCHAR(100) NOT NULL UNIQUE,
+		password VARCHAR(255) NOT NULL,
+		created_at TIMESTAMP);`)
 
 	if err != nil {
 		return nil, err
