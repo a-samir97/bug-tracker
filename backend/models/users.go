@@ -45,7 +45,7 @@ func (user *UserDB) InsertUser(newUser *User) (*User, error) {
 	sqlStatement, err := UserDb.Db.Prepare(`
 	INSERT INTO users (first_name, last_name, username, password, email, role) 
 	VALUES ($1, $2, $3, $4, $5, $6) 
-	RETURNING username, email, role_id `)
+	RETURNING username, email, role `)
 
 	if err != nil {
 		return nil, err

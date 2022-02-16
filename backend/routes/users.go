@@ -7,7 +7,7 @@ import (
 )
 
 func UserRouter(r *mux.Router) {
-	s := r.PathPrefix("/api-users").Subrouter()
+	s := r.PathPrefix("/api/users").Subrouter()
 	// struct for user handlers
 	var user handlers.UserHandlers
 
