@@ -54,10 +54,12 @@ func (u *UserHandlers) CreateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user := &models.User{
-		Username: data["username"],
-		Password: string(hashedPassword),
-		Email:    data["email"],
-		Role:     data["role"]}
+		Username:  data["username"],
+		Password:  string(hashedPassword),
+		Email:     data["email"],
+		Role:      data["role"],
+		FirstName: data["first_name"],
+		LastName:  data["last_name"]}
 
 	_, err = models.UserDb.InsertUser(user)
 
@@ -70,7 +72,7 @@ func (u *UserHandlers) CreateUser(w http.ResponseWriter, r *http.Request) {
 	} else {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusCreated)
-		w.Write([]byte("User is Created"))
+		json.NewEncoder(w).Encode(user)
 		return
 	}
 
