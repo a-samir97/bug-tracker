@@ -110,14 +110,17 @@ func (u *UserHandlers) LoginUser(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("make sure that your credentials are right"))
 }
 
+// TODO: update user information
 func (u *UserHandlers) UpdateUser(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// TODO: get user information by ID
 func (u *UserHandlers) GetUserByID(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// TODO: Delete user by ID
 func (u *UserHandlers) DeleteUser(w http.ResponseWriter, r *http.Request) {
 
 }

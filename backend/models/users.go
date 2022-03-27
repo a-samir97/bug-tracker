@@ -15,6 +15,10 @@ type User struct {
 	Role      string `json:"role"`
 }
 
+type UserDB struct {
+	Db *sql.DB
+}
+
 func (user *User) getUsername() string {
 	return user.Username
 }
@@ -34,10 +38,6 @@ func (user *User) IsAdmin() bool {
 
 func (user *User) IsStuff() bool {
 	return user.Role == "Stuff"
-}
-
-type UserDB struct {
-	Db *sql.DB
 }
 
 // This method responsible for creating a new user
@@ -106,6 +106,7 @@ func (user *UserDB) DeleteUser(id int) error {
 	return nil
 }
 
+// TODO: Change password for existing user
 func (user *UserDB) ChangePassword() error {
 
 	return nil

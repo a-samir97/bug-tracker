@@ -12,10 +12,7 @@ func UsernameExists(username string) bool {
 
 	_ = models.UserDb.Db.QueryRow("SELECT username FROM users WHERE username = $1", username).Scan(&usernameUser)
 
-	if usernameUser == "" {
-		return false
-	}
-	return true
+	return (usernameUser != "")
 }
 
 // EmailExists ...to check for email if exists or not ...
@@ -24,10 +21,7 @@ func EmailExists(email string) bool {
 
 	_ = models.UserDb.Db.QueryRow("SELECT email FROM users WHERE email = $1", email).Scan(&checkEmail)
 
-	if checkEmail == "" {
-		return false
-	}
-	return true
+	return (checkEmail != "")
 }
 
 // HashPassword function .. to encrypt user's password

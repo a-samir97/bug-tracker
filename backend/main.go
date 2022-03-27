@@ -24,6 +24,7 @@ func main() {
 	// reed about design pattern, to solve this part
 	models.BugDb.Db = DB
 	models.UserDb.Db = DB
+	models.TicketDb.Db = DB
 
 	r := mux.NewRouter()
 
