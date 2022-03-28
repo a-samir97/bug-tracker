@@ -3,7 +3,7 @@ package test
 import (
 	"BugTracker/handlers"
 	"BugTracker/helpers"
-	"BugTracker/models"
+	bugSql "BugTracker/models/sql"
 	"bytes"
 	"database/sql"
 	"fmt"
@@ -32,7 +32,7 @@ var (
 
 func setUp() *sql.DB {
 	db, _ := helpers.InitSQLiteDB()
-	models.UserDb.Db = db
+	bugSql.UserDb.Db = db
 
 	return db
 }

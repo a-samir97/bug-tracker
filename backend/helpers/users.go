@@ -2,6 +2,7 @@ package helpers
 
 import (
 	"BugTracker/models"
+	"BugTracker/models/sql"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -10,7 +11,7 @@ import (
 func UsernameExists(username string) bool {
 	var usernameUser string
 
-	_ = models.UserDb.Db.QueryRow("SELECT username FROM users WHERE username = $1", username).Scan(&usernameUser)
+	_ = sql.UserDb.Db.QueryRow("SELECT username FROM users WHERE username = $1", username).Scan(&usernameUser)
 
 	return (usernameUser != "")
 }
@@ -19,7 +20,7 @@ func UsernameExists(username string) bool {
 func EmailExists(email string) bool {
 	var checkEmail string
 
-	_ = models.UserDb.Db.QueryRow("SELECT email FROM users WHERE email = $1", email).Scan(&checkEmail)
+	_ = sql.UserDb.Db.QueryRow("SELECT email FROM users WHERE email = $1", email).Scan(&checkEmail)
 
 	return (checkEmail != "")
 }
@@ -42,7 +43,7 @@ func AuthenticateUser(email string, password string) *models.User {
 	var hashPassword string
 	var userID int
 
-	_ = models.UserDb.Db.QueryRow("SELECT user_id, email, password FROM users WHERE email = $1", email).Scan(&userID, &userEmail, &hashPassword)
+	_ = sql.UserDb.Db.QueryRow("SELECT user_id, email, password FROM users WHERE email = $1", email).Scan(&userID, &userEmail, &hashPassword)
 
 	if userEmail == "" || hashPassword == "" {
 		return nil

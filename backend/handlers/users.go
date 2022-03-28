@@ -4,6 +4,7 @@ import (
 	"BugTracker/auth"
 	"BugTracker/helpers"
 	"BugTracker/models"
+	"BugTracker/models/sql"
 	"encoding/json"
 	"net/http"
 
@@ -61,7 +62,7 @@ func (u *UserHandlers) CreateUser(w http.ResponseWriter, r *http.Request) {
 		FirstName: data["first_name"],
 		LastName:  data["last_name"]}
 
-	_, err = models.UserDb.InsertUser(user)
+	_, err = sql.UserDb.InsertUser(user)
 
 	if err != nil {
 		w.Header().Add("Content-Type", "application/json")
