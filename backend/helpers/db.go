@@ -42,7 +42,7 @@ func InitSQLiteDB() (*sql.DB, error) {
 
 	_, err = db.Exec(`
 		CREATE TABLE IF NOT EXISTS users (
-		user_id SERIAL PRIMARY KEY,
+		user_id INTEGER PRIMARY KEY,
 		role VARCHAR(100) NOT NULL,
 		username VARCHAR(100) NOT NULL UNIQUE,
 		first_name VARCHAR(100) NULL,

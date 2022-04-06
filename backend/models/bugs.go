@@ -1,9 +1,5 @@
 package models
 
-import (
-	"database/sql"
-)
-
 // Bug Model struct ...
 type Bug struct {
 	Base
@@ -15,6 +11,7 @@ type Bug struct {
 	Status      string `json:"status"`
 }
 
+// Status of the bug: Opened, Closed, In Progress, To be tested
 // Get assigne for this bug
 func (bug *Bug) GetAssignedUser() User {
 	return bug.AssignedTo
@@ -27,9 +24,3 @@ func (bug *Bug) GetReporter() User {
 func (bug *Bug) GetBugStatus() string {
 	return bug.Status
 }
-
-type BugDB struct {
-	Db *sql.DB
-}
-
-var BugDb = &BugDB{}

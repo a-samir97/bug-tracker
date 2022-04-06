@@ -4,6 +4,7 @@ import (
 	"BugTracker/auth"
 	"BugTracker/helpers"
 	"BugTracker/models"
+	"BugTracker/models/sql"
 	"encoding/json"
 	"net/http"
 
@@ -61,7 +62,7 @@ func (u *UserHandlers) CreateUser(w http.ResponseWriter, r *http.Request) {
 		FirstName: data["first_name"],
 		LastName:  data["last_name"]}
 
-	_, err = models.UserDb.InsertUser(user)
+	_, err = sql.UserDb.InsertUser(user)
 
 	if err != nil {
 		w.Header().Add("Content-Type", "application/json")
@@ -110,14 +111,17 @@ func (u *UserHandlers) LoginUser(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("make sure that your credentials are right"))
 }
 
+// TODO: update user information
 func (u *UserHandlers) UpdateUser(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// TODO: get user information by ID
 func (u *UserHandlers) GetUserByID(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// TODO: Delete user by ID
 func (u *UserHandlers) DeleteUser(w http.ResponseWriter, r *http.Request) {
 
 }

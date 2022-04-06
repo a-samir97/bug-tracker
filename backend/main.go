@@ -2,7 +2,7 @@ package main
 
 import (
 	"BugTracker/helpers"
-	"BugTracker/models"
+	"BugTracker/models/sql"
 	"BugTracker/routes"
 	"log"
 	"net/http"
@@ -22,8 +22,9 @@ func main() {
 	}
 	// need better implementation for this part
 	// reed about design pattern, to solve this part
-	models.BugDb.Db = DB
-	models.UserDb.Db = DB
+	sql.BugDb.Db = DB
+	sql.UserDb.Db = DB
+	sql.TicketDb.Db = DB
 
 	r := mux.NewRouter()
 
