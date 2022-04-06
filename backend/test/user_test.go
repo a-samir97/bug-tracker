@@ -25,8 +25,8 @@ func assertEqual(t *testing.T, a interface{}, b interface{}, message string) {
 }
 
 var (
-	createUserURL = "/api/users/create"
-	loginURL      = "/api/users/login"
+	createUserURL = "/api/users/create/"
+	loginURL      = "/api/users/login/"
 	userHandlers  = handlers.UserHandlers{}
 )
 

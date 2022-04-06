@@ -44,7 +44,6 @@ func AuthenticateUser(email string, password string) *models.User {
 	var userID int
 
 	_ = sql.UserDb.Db.QueryRow("SELECT user_id, email, password FROM users WHERE email = $1", email).Scan(&userID, &userEmail, &hashPassword)
-
 	if userEmail == "" || hashPassword == "" {
 		return nil
 	}
