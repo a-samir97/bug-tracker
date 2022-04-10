@@ -25,23 +25,27 @@ func (u *UserHandlers) CreateUser(w http.ResponseWriter, r *http.Request) {
 	password := data["password"]
 
 	if err != nil {
+		w.Header().Set("Content-type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("there is something wrong, please try again"))
+		json.NewEncoder(w).Encode(err.Error())
+		return
 	}
 
 	// check if username is not exists
 	usernameExists := helpers.UsernameExists(data["username"])
 	if usernameExists {
+		w.Header().Set("Content-type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("username is already exist"))
+		json.NewEncoder(w).Encode(map[string]string{"detail": "username is already exist"})
 		return
 	}
 
 	// check if email is not exists
 	emailExists := helpers.EmailExists(data["email"])
 	if emailExists {
+		w.Header().Set("Content-type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("email is already exist"))
+		json.NewEncoder(w).Encode(map[string]string{"detail": "email is already exist"})
 		return
 	}
 
@@ -49,8 +53,9 @@ func (u *UserHandlers) CreateUser(w http.ResponseWriter, r *http.Request) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 
 	if err != nil {
+		w.Header().Set("Content-type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("there is something wrong, please try again"))
+		json.NewEncoder(w).Encode(err.Error())
 		return
 	}
 
@@ -67,7 +72,7 @@ func (u *UserHandlers) CreateUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(err.Error()))
+		json.NewEncoder(w).Encode(err.Error())
 		return
 
 	} else {
@@ -88,8 +93,9 @@ func (u *UserHandlers) LoginUser(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
 	if err != nil {
+		w.Header().Set("Content-type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("there is something wrong, please try again"))
+		json.NewEncoder(w).Encode(err.Error())
 	}
 
 	user := helpers.AuthenticateUser(data["email"], data["password"])
@@ -98,17 +104,20 @@ func (u *UserHandlers) LoginUser(w http.ResponseWriter, r *http.Request) {
 		token, err := auth.CreateToken(user.Id)
 
 		if err != nil {
+			w.Header().Set("Content-type", "application/json")
 			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte("there is something wrong, please try again"))
+			json.NewEncoder(w).Encode(err.Error())
 		} else {
+			w.Header().Set("Content-type", "application/json")
 			w.WriteHeader(http.StatusOK)
-			w.Write([]byte(token))
+			json.NewEncoder(w).Encode(map[string]string{"token": token})
 		}
 		return
 	}
-
+	w.Header().Set("Content-type", "application/json")
 	w.WriteHeader(http.StatusNotFound)
-	w.Write([]byte("make sure that your credentials are right"))
+	// TODO: add constant error messages
+	json.NewEncoder(w).Encode(map[string]string{"detail": "make sure that your credentials are right"})
 }
 
 // TODO: update user information
