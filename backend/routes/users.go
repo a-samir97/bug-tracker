@@ -19,4 +19,6 @@ func UserRouter(r *mux.Router) {
 	s.HandleFunc("/:id/", user.DeleteUser).Methods("DELETE")
 	// update user data
 	s.HandleFunc("/:id/", user.UpdateUser).Methods("PUT")
+	// Get user data
+	s.HandleFunc("/{id}/", user.GetUserByID).Methods("GET")
 }
