@@ -7,7 +7,9 @@ import (
 	"BugTracker/models/sql"
 	"encoding/json"
 	"net/http"
+	"strconv"
 
+	"github.com/gorilla/mux"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -127,7 +129,31 @@ func (u *UserHandlers) UpdateUser(w http.ResponseWriter, r *http.Request) {
 
 // TODO: get user information by ID
 func (u *UserHandlers) GetUserByID(w http.ResponseWriter, r *http.Request) {
+	// Get user id from URL param
+	vars := mux.Vars(r)
+	userId := vars["id"]
+	pasredUserId, err := strconv.Atoi(userId)
 
+	if err != nil {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(map[string]string{"detail": "Please make sure that put a valid User ID."})
+		return
+	}
+
+	// need to change
+	fetchedUser, err := sql.UserDb.GetUser(pasredUserId)
+
+	if err != nil {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"detail": err.Error()})
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(fetchedUser)
 }
 
 // TODO: Delete user by ID

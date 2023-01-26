@@ -47,24 +47,23 @@ func (user *UserDB) UpdateUser(updatedUser models.User) error {
 	return nil
 }
 
-// This method responsible for deleting a user
-func (user *UserDB) GetUser(id int) error {
-	stmt, err := UserDb.Db.Prepare(`SELECT username, first_name, last_name, email FROM users WHERE id = ?`)
-	if err != nil {
-		return err
-	}
+// This method responsible for getting a user by id
+func (user *UserDB) GetUser(id int) (*models.User, error) {
+	var fetchedUser models.User
 
-	_, err = stmt.Exec(id)
+	row := UserDb.Db.QueryRow("SELECT username, first_name, last_name, email, role FROM users WHERE user_id = ?", id)
 
-	if err != nil {
-		return err
+	if err := row.Scan(&fetchedUser.Username, &fetchedUser.FirstName, &fetchedUser.LastName, &fetchedUser.Email, &fetchedUser.Role); err != nil {
+		return nil, err
 	}
-	return nil
+	return &fetchedUser, nil
 }
+
+// This method responsible for deleting a user
 
 func (user *UserDB) DeleteUser(id int) error {
 
-	stmt, err := UserDb.Db.Prepare(`DELETE FROM users WHERE id = ?`)
+	stmt, err := UserDb.Db.Prepare(`DELETE FROM users WHERE user_id = ?`)
 
 	if err != nil {
 		return err
@@ -74,11 +73,5 @@ func (user *UserDB) DeleteUser(id int) error {
 	if err != nil {
 		return err
 	}
-	return nil
-}
-
-// TODO: Change password for existing user
-func (user *UserDB) ChangePassword() error {
-
 	return nil
 }
