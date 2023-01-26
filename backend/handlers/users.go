@@ -158,5 +158,26 @@ func (u *UserHandlers) GetUserByID(w http.ResponseWriter, r *http.Request) {
 
 // TODO: Delete user by ID
 func (u *UserHandlers) DeleteUser(w http.ResponseWriter, r *http.Request) {
+	// Get User Id
+	vars := mux.Vars(r)
+	userId := vars["id"]
+	pasredUserId, err := strconv.Atoi(userId)
 
+	// if there is error in parsing
+	if err != nil {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"detail": err.Error()})
+	}
+
+	err = sql.UserDb.DeleteUser(pasredUserId)
+
+	if err != nil {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(map[string]string{"detail": err.Error()})
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusNoContent)
 }
