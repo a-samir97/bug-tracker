@@ -122,12 +122,51 @@ func (u *UserHandlers) LoginUser(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"detail": "make sure that your credentials are right"})
 }
 
-// TODO: update user information
 func (u *UserHandlers) UpdateUser(w http.ResponseWriter, r *http.Request) {
+	// Get data from user
+	// data that user needs to update
+	var data map[string]string
+	err := json.NewDecoder(r.Body).Decode(&data)
+	defer r.Body.Close()
+	if err != nil {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"detail": err.Error()})
+	}
 
+	// get user id from URL param
+	vars := mux.Vars(r)
+	userId := vars["id"]
+
+	// parsing userid to int
+	parsedUserID, err := strconv.Atoi(userId)
+
+	// if there is error in parsing
+	if err != nil {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"detail": err.Error()})
+	}
+
+	user := &models.User{
+		Email:     data["email"],
+		FirstName: data["first_name"],
+		LastName:  data["last_name"]}
+
+	err = sql.UserDb.UpdateUser(*user, parsedUserID)
+
+	if err != nil {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"detail": err.Error()})
+	}
+
+	// if everything is okay :D
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(user)
 }
 
-// TODO: get user information by ID
 func (u *UserHandlers) GetUserByID(w http.ResponseWriter, r *http.Request) {
 	// Get user id from URL param
 	vars := mux.Vars(r)
@@ -156,7 +195,6 @@ func (u *UserHandlers) GetUserByID(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(fetchedUser)
 }
 
-// TODO: Delete user by ID
 func (u *UserHandlers) DeleteUser(w http.ResponseWriter, r *http.Request) {
 	// Get User Id
 	vars := mux.Vars(r)
