@@ -31,14 +31,14 @@ func (user *UserDB) InsertUser(newUser *models.User) (*models.User, error) {
 }
 
 // This method responsible for update user info
-func (user *UserDB) UpdateUser(updatedUser models.User) error {
-	stmt, err := UserDb.Db.Prepare(`UPDATE users set username = ?, email = ? WHERE id = ?`)
+func (user *UserDB) UpdateUser(updatedUser models.User, userId int) error {
+	stmt, err := UserDb.Db.Prepare(`UPDATE users set first_name = ?, last_name = ? WHERE user_id = ?`)
 
 	if err != nil {
 		return err
 	}
 
-	_, err = stmt.Exec(updatedUser.GetUsername(), updatedUser.GetEmail(), updatedUser.Id)
+	_, err = stmt.Exec(updatedUser.FirstName, updatedUser.LastName, userId)
 
 	if err != nil {
 		return err
